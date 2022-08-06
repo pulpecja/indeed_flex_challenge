@@ -6,7 +6,7 @@ module Validators
   class ProductValidator < BaseValidator
     def valid?(product)
       required_attributes_present?(product) &&
-        is_float_and_positive?(product.price)
+        float_and_positive?(product.price)
     end
 
     private

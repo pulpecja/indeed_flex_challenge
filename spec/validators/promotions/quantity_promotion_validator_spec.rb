@@ -68,6 +68,5 @@ describe Validators::Promotions::QuantityPromotionValidator do
 
       it { is_expected.to be false }
     end
-
   end
 end

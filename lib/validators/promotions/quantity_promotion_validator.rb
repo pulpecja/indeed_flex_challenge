@@ -5,8 +5,8 @@ module Validators
     class QuantityPromotionValidator < BaseValidator
       def valid?(promotion)
         required_attributes_present?(promotion) &&
-          is_integer_and_positive?(promotion.minimum_amount) &&
-          is_float_and_positive?(promotion.discounted_price)
+          integer_and_positive?(promotion.minimum_amount) &&
+          float_and_positive?(promotion.discounted_price)
       end
 
       private

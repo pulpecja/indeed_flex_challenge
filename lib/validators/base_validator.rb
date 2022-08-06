@@ -12,13 +12,13 @@ module Validators
       true
     end
 
-    def is_float_and_positive?(attr)
+    def float_and_positive?(attr)
       return false unless attr.is_a? Float
 
       attr.positive?
     end
 
-    def is_integer_and_positive?(attr)
+    def integer_and_positive?(attr)
       return false unless attr.is_a? Integer
 
       attr.positive?
