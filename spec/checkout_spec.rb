@@ -3,9 +3,9 @@
 require 'spec_helper'
 
 describe Checkout do
-  let(:lavender_heart) { Product.new('001','Lavender heart',9.25) }
-  let(:personalised_cufflinks) { Product.new('002','Personalised cufflinks',45) }
-  let(:kids_tshirt) { Product.new('003','Kids T-shirt',19.95) }
+  let(:lavender_heart) { Product.new('001', 'Lavender heart', 9.25) }
+  let(:personalised_cufflinks) { Product.new('002', 'Personalised cufflinks', 45.0) }
+  let(:kids_tshirt) { Product.new('003', 'Kids T-shirt', 19.95) }
 
   let(:percentage_promotion) { Promotions::PercentagePromotion.new(60.0, 10.0) }
   let(:quantity_promotion) { Promotions::QuantityPromotion.new('001', 2, 8.5) }
@@ -25,7 +25,7 @@ describe Checkout do
     context 'for 001, 003 and 001 items' do
       it 'counts promotions and returns total price' do
         checkout.scan(lavender_heart)
-        checkout.scan(personalised_cufflinks)
+        checkout.scan(kids_tshirt)
         checkout.scan(lavender_heart)
         expect(checkout.total).to eq 36.95
       end
