@@ -21,6 +21,12 @@ describe Validators::ProductValidator do
       it { is_expected.to be false }
     end
 
+    context 'for empty code' do
+      let(:code) { '' }
+
+      it { is_expected.to be false }
+    end
+
     context 'for nil name' do
       let(:name) { nil }
 

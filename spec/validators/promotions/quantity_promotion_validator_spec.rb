@@ -11,13 +11,18 @@ describe Validators::Promotions::QuantityPromotionValidator do
     let(:minimum_amount) { 2 }
     let(:discounted_price) { 8.50 }
 
-
     context 'for valid params' do
       it { is_expected.to be true }
     end
 
     context 'for nil product_code' do
       let(:product_code) { nil }
+
+      it { is_expected.to be false }
+    end
+
+    context 'for empty product_code' do
+      let(:product_code) { '' }
 
       it { is_expected.to be false }
     end
@@ -41,7 +46,13 @@ describe Validators::Promotions::QuantityPromotionValidator do
     end
 
     context 'for minimum_amount lower than 0' do
-      let(:minimum_amount) { -0.5 }
+      let(:minimum_amount) { -1 }
+
+      it { is_expected.to be false }
+    end
+
+    context 'for minimum_amount being a float' do
+      let(:minimum_amount) { 1.5 }
 
       it { is_expected.to be false }
     end
