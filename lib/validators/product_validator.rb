@@ -22,15 +22,11 @@ module Validators
     end
 
     def valid_price?(price)
-      price_float?(price) && price_positive?(price)
+      price_float?(price) && price.positive?
     end
 
     def price_float?(price)
       price.is_a? Float
-    end
-
-    def price_positive?(price)
-      price > 0
     end
   end
 end
