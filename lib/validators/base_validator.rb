@@ -23,5 +23,9 @@ module Validators
 
       attr.positive?
     end
+
+    def lower_or_equal_than_100_percent?(percent)
+      percent <= 100
+    end
   end
 end

@@ -8,7 +8,7 @@ describe Validators::Promotions::PercentagePromotionValidator do
 
     let(:percentage_promotion) { Promotions::PercentagePromotion.new(minimum_amount, percentage_discount) }
     let(:minimum_amount) { 60.0 }
-    let(:percentage_discount) { 10 }
+    let(:percentage_discount) { 10.0 }
 
     context 'for valid params' do
       it { is_expected.to be true }
@@ -44,12 +44,6 @@ describe Validators::Promotions::PercentagePromotionValidator do
       it { is_expected.to be false }
     end
 
-    context 'for minimum_amount being a float' do
-      let(:minimum_amount) { 1.5 }
-
-      it { is_expected.to be false }
-    end
-
     context 'for string percentage_discount' do
       let(:percentage_discount) { 'percentage_discount' }
 
@@ -60,6 +54,18 @@ describe Validators::Promotions::PercentagePromotionValidator do
       let(:percentage_discount) { -0.5 }
 
       it { is_expected.to be false }
+    end
+
+    context 'for percentage_discount greater than 100' do
+      let(:percentage_discount) { 190.0 }
+
+      it { is_expected.to be false }
+    end
+
+    context 'for percentage_discount equal to 100' do
+      let(:percentage_discount) { 100.0 }
+
+      it { is_expected.to be true }
     end
   end
 end
