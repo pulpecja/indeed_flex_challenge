@@ -2,6 +2,8 @@
 
 module Validators
   class BaseValidator
+    CODE_REGEX = /\A\d{3}\Z/
+
     private
 
     def required_attributes_present?(product)
@@ -26,6 +28,10 @@ module Validators
 
     def lower_or_equal_than_100_percent?(percent)
       percent <= 100
+    end
+
+    def valid_code_format?(code)
+      code.match?(CODE_REGEX)
     end
   end
 end

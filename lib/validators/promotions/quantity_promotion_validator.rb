@@ -6,7 +6,8 @@ module Validators
       def valid?(promotion)
         required_attributes_present?(promotion) &&
           integer_and_positive?(promotion.minimum_amount) &&
-          float_and_positive?(promotion.discounted_price)
+          float_and_positive?(promotion.discounted_price) &&
+          valid_code_format?(promotion.product_code)
       end
 
       private

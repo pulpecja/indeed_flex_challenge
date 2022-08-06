@@ -27,6 +27,12 @@ describe Validators::Promotions::QuantityPromotionValidator do
       it { is_expected.to be false }
     end
 
+    context 'for invalid product_code' do
+      let(:product_code) { 'code' }
+
+      it { is_expected.to be false }
+    end
+
     context 'for nil minimum_amount' do
       let(:minimum_amount) { nil }
 
