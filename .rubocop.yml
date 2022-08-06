@@ -1,0 +1,11 @@
+AllCops:
+  TargetRubyVersion: 3.1.0
+  NewCops: enable
+  Exclude:
+    - 'spec/spec_helper.rb'
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/BlockLength:
+  AllowedMethods: ['describe', 'context']
