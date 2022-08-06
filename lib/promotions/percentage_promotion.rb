@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'validators/promotions/percentage_promotion_validator'
+require_relative '../validators/promotions/percentage_promotion_validator'
 
 module Promotions
   class PercentagePromotion

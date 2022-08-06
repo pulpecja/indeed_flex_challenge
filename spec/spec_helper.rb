@@ -18,6 +18,11 @@
 
 require_relative '../lib/checkout.rb'
 require_relative '../lib/product.rb'
+require_relative '../lib/promotions/percentage_promotion.rb'
+require_relative '../lib/promotions/quantity_promotion.rb'
+require_relative '../lib/validators/product_validator.rb'
+require_relative '../lib/validators/promotions/percentage_promotion_validator.rb'
+require_relative '../lib/validators/promotions/quantity_promotion_validator.rb'
 require_relative '../lib/validators/product_validator.rb'
 
 RSpec.configure do |config|
