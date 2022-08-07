@@ -80,4 +80,3 @@ Some ideas for improvements:
 1. The application currently does not have a database. If it was added, we could also add unique validation on the Product's code and use it as a primary key.
 2. The application is ready for creating new types of promotions. It is enough to create new classes in the `promotions` directories.
 3. The application currently does not handle currencies. We can add a `Money` gem to return also the information about the currency.
-
