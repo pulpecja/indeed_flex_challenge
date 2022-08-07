@@ -15,20 +15,44 @@ describe Checkout do
   describe '#initialize' do
     subject(:create_checkout) { checkout }
 
-    context 'for invalid promotion' do
-      let(:quantity_promotion) { Promotions::QuantityPromotion.new('001', '2', 8.5) }
-
-      it 'raises error' do
+    shared_examples 'raises InvalidPromotionError' do
+      it 'raises InvalidPromotionError' do
         expect { create_checkout }.to raise_error Checkout::InvalidPromotionError
       end
+    end
+
+    before do
+      double = instance_double(validator)
+      allow(validator).to receive(:new).and_return(double)
+      allow(double).to receive(:valid?).with(invalid_promotion).and_return(false)
+    end
+
+    context 'for invalid quantity promotion' do
+      let(:validator) { Validators::Promotions::QuantityPromotionValidator }
+      let(:invalid_promotion) { quantity_promotion }
+
+      include_examples 'raises InvalidPromotionError'
+    end
+
+    context 'for invalid percentage promotion' do
+      let(:validator) { Validators::Promotions::PercentagePromotionValidator }
+      let(:invalid_promotion) { percentage_promotion }
+
+      include_examples 'raises InvalidPromotionError'
     end
   end
 
   describe '#scan' do
-    subject(:scan_item) { checkout.scan(item) }
+    subject(:scan_item) { checkout.scan(lavender_heart) }
 
     context 'for invalid product' do
-      let(:item) { Product.new('', 'Lavender heart', 9.25) }
+      let(:validator) { Validators::ProductValidator }
+
+      before do
+        double = instance_double(validator)
+        allow(validator).to receive(:new).and_return(double)
+        allow(double).to receive(:valid?).with(lavender_heart).and_return(false)
+      end
 
       it 'raises error' do
         expect { scan_item }.to raise_error Checkout::InvalidProductError
