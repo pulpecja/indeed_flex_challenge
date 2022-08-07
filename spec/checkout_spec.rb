@@ -87,14 +87,14 @@ describe Checkout do
         Checkout.new([percentage_promotion,
                       better_lavender_heart_promotion,
                       quantity_promotion,
-                      better_tshirt_promotion,
-                      tshirt_promotion])
+                      tshirt_promotion,
+                      better_tshirt_promotion])
       end
 
       it 'counts promotions and returns total price' do
         4.times { checkout.scan(lavender_heart) }
         3.times { checkout.scan(kids_tshirt) }
-        expect(checkout.total).to eq 75.0
+        expect(checkout.total).to eq 74.7
       end
     end
   end

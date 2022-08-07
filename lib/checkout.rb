@@ -41,13 +41,15 @@ class Checkout
   end
 
   def add_quantity_promotions
-    quantity_promotions = select_promotions(Promotions::QuantityPromotion)
+    @basket.each do |code, attributes|
+      next if best_quantity_promotions[code].nil?
 
-    quantity_promotions.each do |promotion|
-      discounted_product_code = @basket[promotion.product_code]
-      next if promotion.minimum_amount > discounted_product_code[:amount]
+      best_quantity_promotions[code].each do |promotion|
+        next if promotion.minimum_amount > attributes[:amount]
 
-      discounted_product_code[:price] = promotion.discounted_price
+        attributes[:price] = promotion.discounted_price
+        break
+      end
     end
   end
 
@@ -58,12 +60,17 @@ class Checkout
       @sum = count_percentage_discount(promotion.percentage_discount)
       break
     end
+
     @sum.round(2)
   end
 
   # sort promotions starting with the best for the customer (the highest discount)
   def best_percentage_promotions
     select_promotions(Promotions::PercentagePromotion).sort_by(&:percentage_discount).reverse
+  end
+
+  def best_quantity_promotions
+    select_promotions(Promotions::QuantityPromotion).sort_by(&:discounted_price).group_by(&:product_code)
   end
 
   def count_percentage_discount(discount)
