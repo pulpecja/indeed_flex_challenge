@@ -12,6 +12,30 @@ describe Checkout do
 
   let(:checkout) { Checkout.new([percentage_promotion, quantity_promotion]) }
 
+  describe '#initialize' do
+    subject(:create_checkout) { checkout }
+
+    context 'for invalid promotion' do
+      let(:quantity_promotion) { Promotions::QuantityPromotion.new('001', '2', 8.5) }
+
+      it 'raises error' do
+        expect { create_checkout }.to raise_error Checkout::InvalidPromotionError
+      end
+    end
+  end
+
+  describe '#scan' do
+    subject(:scan_item) { checkout.scan(item) }
+
+    context 'for invalid product' do
+      let(:item) { Product.new('', 'Lavender heart', 9.25) }
+
+      it 'raises error' do
+        expect { scan_item }.to raise_error Checkout::InvalidProductError
+      end
+    end
+  end
+
   describe 'total' do
     # tests from the requirements
     context 'for 001, 002 and 003 items' do

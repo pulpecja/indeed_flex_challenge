@@ -12,7 +12,7 @@ module Promotions
     end
 
     def valid?
-      Validators::Promotions::PercentagePromotion.new.valid?(self)
+      Validators::Promotions::PercentagePromotionValidator.new.valid?(self)
     end
   end
 end

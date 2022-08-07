@@ -13,7 +13,7 @@ module Promotions
     end
 
     def valid?
-      Validators::Promotions::QuantityPromotion.new.valid?(self)
+      Validators::Promotions::QuantityPromotionValidator.new.valid?(self)
     end
   end
 end
