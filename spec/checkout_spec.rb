@@ -13,6 +13,7 @@ describe Checkout do
   let(:checkout) { Checkout.new([percentage_promotion, quantity_promotion]) }
 
   describe 'total' do
+    # tests from the requirements
     context 'for 001, 002 and 003 items' do
       it 'counts promotions and returns total price' do
         checkout.scan(lavender_heart)
@@ -38,6 +39,24 @@ describe Checkout do
         checkout.scan(lavender_heart)
         checkout.scan(kids_tshirt)
         expect(checkout.total).to eq 73.76
+      end
+    end
+
+    # additional tests
+    context 'with additional promotions' do
+      let(:smaller_percentage_promotion) { Promotions::PercentagePromotion.new(20.0, 5.0) }
+
+      let(:checkout) do
+        Checkout.new([smaller_percentage_promotion,
+                      percentage_promotion,
+                      quantity_promotion])
+      end
+
+      it 'counts promotions and returns total price' do
+        checkout.scan(lavender_heart)
+        checkout.scan(personalised_cufflinks)
+        checkout.scan(kids_tshirt)
+        expect(checkout.total).to eq 66.78
       end
     end
   end

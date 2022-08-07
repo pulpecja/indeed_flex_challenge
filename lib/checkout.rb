@@ -17,9 +17,9 @@ class Checkout
     add_quantity_promotions
 
     @basket.each do |_code, attributes|
-      @sum += (attributes[0] * attributes[1])
+      @sum += (attributes[:amount] * attributes[:price])
     end
-    add_percentage_promotions
+    add_percentage_promotion
   end
 
   private
@@ -33,36 +33,44 @@ class Checkout
   end
 
   def create_item(item)
-    @basket[item.code] = [1, item.price]
+    @basket[item.code] = { amount: 1, price: item.price }
   end
 
   def add_item(item)
-    @basket[item.code][0] += 1
+    @basket[item.code][:amount] += 1
   end
 
   def add_quantity_promotions
-    quantity_promotions = extract_promotions(Promotions::QuantityPromotion)
+    quantity_promotions = select_promotions(Promotions::QuantityPromotion)
 
     quantity_promotions.each do |promotion|
       discounted_product_code = @basket[promotion.product_code]
-      next if promotion.minimum_amount > discounted_product_code[0]
+      next if promotion.minimum_amount > discounted_product_code[:amount]
 
-      discounted_product_code[1] = promotion.discounted_price
+      discounted_product_code[:price] = promotion.discounted_price
     end
   end
 
-  def add_percentage_promotions
-    percentage_promotions = extract_promotions(Promotions::PercentagePromotion)
-
-    percentage_promotions.each do |promotion|
+  def add_percentage_promotion
+    best_percentage_promotions.each do |promotion|
       next if promotion.minimum_amount > @sum
 
-      @sum = @sum * (100.0 - promotion.percentage_discount) / 100
+      @sum = count_percentage_discount(promotion.percentage_discount)
+      break
     end
     @sum.round(2)
   end
 
-  def extract_promotions(klass_name)
+  # sort promotions starting with the best for the customer (the highest discount)
+  def best_percentage_promotions
+    select_promotions(Promotions::PercentagePromotion).sort_by(&:percentage_discount).reverse
+  end
+
+  def count_percentage_discount(discount)
+    @sum * (100.0 - discount) / 100
+  end
+
+  def select_promotions(klass_name)
     @promotional_rules.select { |promo| promo.instance_of?(klass_name) }
   end
 end
