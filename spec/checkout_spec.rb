@@ -21,22 +21,14 @@ describe Checkout do
       end
     end
 
-    before do
-      double = instance_double(validator)
-      allow(validator).to receive(:new).and_return(double)
-      allow(double).to receive(:valid?).with(invalid_promotion).and_return(false)
-    end
-
     context 'for invalid quantity promotion' do
-      let(:validator) { Validators::Promotions::QuantityPromotionValidator }
-      let(:invalid_promotion) { quantity_promotion }
+      before { allow(quantity_promotion).to receive(:valid?).and_return(false) }
 
       include_examples 'raises InvalidPromotionError'
     end
 
     context 'for invalid percentage promotion' do
-      let(:validator) { Validators::Promotions::PercentagePromotionValidator }
-      let(:invalid_promotion) { percentage_promotion }
+      before { allow(percentage_promotion).to receive(:valid?).and_return(false) }
 
       include_examples 'raises InvalidPromotionError'
     end
