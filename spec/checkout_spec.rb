@@ -43,11 +43,11 @@ describe Checkout do
     end
 
     # additional tests
-    context 'with additional promotions' do
-      let(:smaller_percentage_promotion) { Promotions::PercentagePromotion.new(20.0, 5.0) }
+    context 'with additional percentage promotion' do
+      let(:lower_percentage_promotion) { Promotions::PercentagePromotion.new(20.0, 5.0) }
 
       let(:checkout) do
-        Checkout.new([smaller_percentage_promotion,
+        Checkout.new([lower_percentage_promotion,
                       percentage_promotion,
                       quantity_promotion])
       end
@@ -57,6 +57,44 @@ describe Checkout do
         checkout.scan(personalised_cufflinks)
         checkout.scan(kids_tshirt)
         expect(checkout.total).to eq 66.78
+      end
+    end
+
+    context 'with additional quantity promotion' do
+      let(:better_quantity_promotion) { Promotions::QuantityPromotion.new('001', 3, 8.0) }
+
+      let(:checkout) do
+        Checkout.new([percentage_promotion,
+                      better_quantity_promotion,
+                      quantity_promotion])
+      end
+
+      it 'counts promotions and returns total price' do
+        checkout.scan(lavender_heart)
+        checkout.scan(kids_tshirt)
+        checkout.scan(lavender_heart)
+        checkout.scan(lavender_heart)
+        expect(checkout.total).to eq 43.95
+      end
+    end
+
+    context 'with quantity promotions for multiple items' do
+      let(:better_lavender_heart_promotion) { Promotions::QuantityPromotion.new('001', 3, 8.0) }
+      let(:tshirt_promotion) { Promotions::QuantityPromotion.new('003', 2, 18.0) }
+      let(:better_tshirt_promotion) { Promotions::QuantityPromotion.new('003', 3, 17.0) }
+
+      let(:checkout) do
+        Checkout.new([percentage_promotion,
+                      better_lavender_heart_promotion,
+                      quantity_promotion,
+                      better_tshirt_promotion,
+                      tshirt_promotion])
+      end
+
+      it 'counts promotions and returns total price' do
+        4.times { checkout.scan(lavender_heart) }
+        3.times { checkout.scan(kids_tshirt) }
+        expect(checkout.total).to eq 75.0
       end
     end
   end
