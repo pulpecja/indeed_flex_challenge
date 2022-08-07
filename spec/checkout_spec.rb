@@ -37,17 +37,29 @@ describe Checkout do
   describe '#scan' do
     subject(:scan_item) { checkout.scan(lavender_heart) }
 
-    context 'for invalid product' do
-      let(:validator) { Validators::ProductValidator }
+    let(:validator) { Validators::ProductValidator }
 
-      before do
-        double = instance_double(validator)
-        allow(validator).to receive(:new).and_return(double)
-        allow(double).to receive(:valid?).with(lavender_heart).and_return(false)
-      end
+    before do
+      double = instance_double(validator)
+      allow(validator).to receive(:new).and_return(double)
+      allow(double).to receive(:valid?).with(lavender_heart).and_return(product_validity)
+    end
+
+    context 'for invalid product' do
+      let(:product_validity) { false }
 
       it 'raises error' do
         expect { scan_item }.to raise_error Checkout::InvalidProductError
+      end
+    end
+
+    context 'for valid product' do
+      let(:product_validity) { true }
+
+      it 'adds item to basket' do
+        expect(checkout.total).to eq 0
+        scan_item
+        expect(checkout.total).to eq lavender_heart.price
       end
     end
   end
