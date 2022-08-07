@@ -2,23 +2,23 @@
 
 ## Project description
 
-This is a checkout system that accepts 2 types of promotions, allows to add products and counts total amount of the items in the basket.
+This is a checkout system that accepts 2 types of promotions, allows to add products and counts the total amount of the items in the basket.
 
 There are two types of promotions:
-- `Percentage Promotion`, which lowers the total basket value by the specific percentage if total value is higher than specific amount.
+- `Percentage Promotion`, which lowers the total basket value by the specific percentage if the total value is higher than the specific amount.
 - `Quantity Promotion`, which lowers the price of the products if they are bought at least in the specified quantity.
 
 `QuantityPromotion` attributes:
-- `product_code` - required - this is the code of the product which price can be reduced
+- `product_code` - required - this is the code of the product whose price can be reduced
 - `minimum_amount` - required - this is the minimum items' quantity that needs to be bought to use the promotion
-- `discounted_price` - required - this is the new, lower price that should be used to count basket's price
+- `discounted_price` - required - this is the new, lower price that should be used to count the basket's price
 
 `PercentagePromotion` attributes:
 - `minimum_amount` - required - this is the minimum total value of the basket that allows to use this promotion
 - `percentage_discount` - required - this is the value of the discount counted.
 
 Quantity promotions are counted before percentage promotions.
-If there are multiple promotions available for the same item of basket's value, the best for the customer one will be used.
+If there are multiple promotions available for the same item of basket's value, the one that's best for the customer will be used.
 
 `Product` attributes:
 - `code` - required - ID of the product
@@ -79,14 +79,5 @@ rubocop
 Some ideas for improvements:
 1. The application currently does not have a database. If it was added, we could also add unique validation on the Product's code and use it as a primary key.
 2. The application is ready for creating new types of promotions. It is enough to create new classes in the `promotions` directories.
-3. The application currently does not handle currencies. We can add `Money` gem to keep also the data about the currency.
-
-
-
-
-
-
-
-
-
+3. The application currently does not handle currencies. We can add a `Money` gem to return also the information about the currency.
 
