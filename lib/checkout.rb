@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'pry'
-
 class Checkout
   class InvalidProductError < StandardError; end
   class InvalidPromotionError < StandardError; end
