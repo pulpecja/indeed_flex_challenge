@@ -22,7 +22,7 @@ class Checkout
 
   def total
     add_quantity_promotions
-    @sum = sum_items_prices
+    @sum = items_prices_sum
     add_percentage_promotion
   end
 
@@ -46,40 +46,29 @@ class Checkout
 
   def add_quantity_promotions
     @basket.each do |code, attributes|
-      next if best_quantity_promotions[code].nil?
-
-      best_promotion = best_quantity_promotions[code].select do |promo|
-        promo.minimum_amount <= attributes[:amount]
-      end.first
-      next if best_promotion.nil?
-
-      attributes[:price] = best_promotion.discounted_price
+      attributes[:price] = Promotions::QuantityPromotion.find_best_price(
+        quantity_promotions,
+        code,
+        attributes[:amount],
+        attributes[:price]
+      )
     end
   end
 
-  def sum_items_prices
+  def add_percentage_promotion
+    Promotions::PercentagePromotion.use_best_promotion(percentage_promotions, @sum)
+  end
+
+  def items_prices_sum
     @basket.values.sum { |v| v[:amount] * v[:price] }
   end
 
-  def add_percentage_promotion
-    best_promotion = best_percentage_promotions.select { |promo| promo.minimum_amount < @sum }.first
-    return @sum if best_promotion.nil?
-
-    @sum = count_percentage_discount(best_promotion.percentage_discount).round(2)
+  def quantity_promotions
+    select_promotions(Promotions::QuantityPromotion)
   end
 
-  # sort promotions starting with the best for the customer (the highest discount)
-  def best_percentage_promotions
-    select_promotions(Promotions::PercentagePromotion).sort_by(&:percentage_discount).reverse
-  end
-
-  # sort promotions starting with the best for the customer (the lowest price) and group by the code
-  def best_quantity_promotions
-    select_promotions(Promotions::QuantityPromotion).sort_by(&:discounted_price).group_by(&:product_code)
-  end
-
-  def count_percentage_discount(discount)
-    @sum * (100.0 - discount) / 100
+  def percentage_promotions
+    select_promotions(Promotions::PercentagePromotion)
   end
 
   def select_promotions(klass_name)
